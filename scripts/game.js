@@ -13,9 +13,11 @@ function startGame() {
   incorrectGuesses = 0;
 
   displayGameStatus();
-
+  handleScreenPress();
   document.addEventListener('keydown', handleKeyPress);
 }
+
+
 
 function displayGameStatus() {
 
@@ -26,22 +28,22 @@ function displayGameStatus() {
                     <p>Incorrect Guesses: ${incorrectGuesses}</p>
 
                     </div>`
-  if (guessedWord.join('') === selectedWord) {
+    if (guessedWord.join('') === selectedWord) {
     alert('Congratulations! You won!');
     startGame(); 
   } else if (incorrectGuesses === 1) {
     head()
   }
-  else if (incorrectGuesses === 2) {
+    else if (incorrectGuesses === 2) {
     body()
   }
-  else if (incorrectGuesses === 3) {
+    else if (incorrectGuesses === 3) {
     leftHand()  }
-  else if (incorrectGuesses === 4) {
+    else if (incorrectGuesses === 4) {
     rightHand()  }
     else if (incorrectGuesses === 5) {
         leftLeg()  }
-        else if (incorrectGuesses === maxIncorrectGuesses) {
+    else if (incorrectGuesses === maxIncorrectGuesses) {
             rightLeg() 
             alert("Sorry! You lost. The correct word was " + selectedWord);
             startGame()
@@ -49,6 +51,8 @@ function displayGameStatus() {
 
 }
 }
+
+
 function handleKeyPress(event) {
   if (/^[a-zA-Z]$/.test(event.key)) {
     const guessedLetter = event.key.toLowerCase();
@@ -66,5 +70,37 @@ function handleKeyPress(event) {
     displayGameStatus();
   }
 }
+function handleScreenPress(){
+    document.addEventListener('DOMContentLoaded', function() {
+        let letters=document.querySelectorAll('.answer-section');
+        //for (let letter of letters){
+            //letter.addEventListener('click',function(){
+                guessedLetter=letter.innerHTML
+                const guessedLetter = event.key.toLowerCase();
+                letters.forEach(function(div){
+                    div.addEventListener('click',function(){
+                        if (selectedWord.includes(guessedLetter)) {
+                            for (let i = 0; i < selectedWord.length; i++) {
+                              if (selectedWord[i] === guessedLetter) {
+                                guessedWord[i] = guessedLetter;
+                              }
+                            }
+                          } else {
+                            incorrectGuesses++;
+                          }
+                    })
+                })
+                
+
+            })
+        //}
+
+
+    
+    
+}
+
+
+
 
 startGame();
