@@ -7,14 +7,18 @@ const maxIncorrectGuesses = 6;
 
 function startGame() {
   selectedWord = words[Math.floor(Math.random() * words.length)];
-
+  //console.log(selectedWord);
   guessedWord = Array(selectedWord.length).fill('_');
 
   incorrectGuesses = 0;
 
+
   displayGameStatus();
-  handleScreenPress();
+  element=document.getElementById("hang")
+  element.innerHTML="<img src=\"./assets/hang.svg\" class=\"stand\" />"
   document.addEventListener('keydown', handleKeyPress);
+  document.addEventListener('click', handleLetterClick);
+
 }
 
 
@@ -70,35 +74,57 @@ function handleKeyPress(event) {
     displayGameStatus();
   }
 }
-function handleScreenPress(){
-    document.addEventListener('DOMContentLoaded', function() {
-        let letters=document.querySelectorAll('.answer-section');
-        //for (let letter of letters){
-            //letter.addEventListener('click',function(){
-                guessedLetter=letter.innerHTML
-                const guessedLetter = event.key.toLowerCase();
-                letters.forEach(function(div){
-                    div.addEventListener('click',function(){
-                        if (selectedWord.includes(guessedLetter)) {
-                            for (let i = 0; i < selectedWord.length; i++) {
-                              if (selectedWord[i] === guessedLetter) {
-                                guessedWord[i] = guessedLetter;
-                              }
-                            }
-                          } else {
-                            incorrectGuesses++;
-                          }
-                    })
-                })
-                
-
-            })
-        //}
-
-
-    
-    
-}
+function handleLetterClick(clickedLetter) {
+    //console.log(clickedLetter)
+    clickedLetter=clickedLetter.target.innerHTML.toLowerCase()
+    if (!selectedWord.includes(clickedLetter)) {
+      // Incorrect guess
+      incorrectGuesses++;
+      if (incorrectGuesses === maxIncorrectGuesses) {
+        rightLeg()
+        alert("Sorry! You lost. The correct word was " + selectedWord);
+        startGame(); // Start a new game
+      } else {
+        // Display the appropriate hangman part for each incorrect guess
+        switch (incorrectGuesses) {
+          case 1:
+            head();
+            break;
+          case 2:
+            body();
+            break;
+          case 3:
+            leftHand();
+            break;
+          case 4:
+            rightHand();
+            break;
+          case 5:
+            leftLeg();
+            break;
+          case 6:
+            rightLeg();
+            break;
+        }
+      }
+    } else {
+      // Correct guess
+      for (let i = 0; i < selectedWord.length; i++) {
+        if (selectedWord[i] === clickedLetter) {
+          guessedWord[i] = clickedLetter;
+        }
+      }
+  
+      // Check if the game is won
+      if (guessedWord.join('') === selectedWord) {
+        alert('Congratulations! You won!');
+        startGame(); // Start a new game
+      }
+    }
+  
+    // Display the updated game status
+    displayGameStatus();
+  }
 
 
 
